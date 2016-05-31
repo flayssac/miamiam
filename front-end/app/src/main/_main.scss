@@ -1,0 +1,37 @@
+body {
+	line-height: inherit;
+	background-image: url(img/bgpage.png);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	background-attachment: fixed;
+}
+
+.container {
+	width: 100%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.loading-ah{
+	width: 80%;
+	height: 350px;
+	background-color: #ffffff;
+	margin: auto;
+	margin-top: 100px;
+	padding-top: 80px;
+	background: -moz-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%,rgba(14, 40, 76,1) 70%,rgba(14, 40, 76,0) 100%);
+	background: -webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%,rgba(14, 40, 76,1) 70%,rgba(14, 40, 76,0) 100%);
+	background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%,rgba(14, 40, 76,1) 70%,rgba(14, 40, 76,0) 100%);
+}
+
+.text-bold{
+  font-weight: bold;
+}
+
+table.data-table td div.actions-btns {
+  display: inline-flex;
+
+  a {
+    margin: 2px;
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "miamiam",
+  "version": "0.0.1-SNAPSHOT",
+  "private": true,
+  "authors": [
+    "Damien Guérin <dguerin@sqli.com>",
+    "Robin Coma Delperier <rcomadelperier@sqli.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab-toulouse.sqli.com:eurocopter/miamiam.git"
+  },
+  "description": "Airbus Helicopters miamiam project",
+  "dependencies": {
+    "angular": "1.3.13",
+    "angular-strap": "2.3.5",
+    "angular-resource": "1.3.13",
+    "angular-mocks": "1.3.13",
+    "angular-ui-router": "0.2.11",
+    "angular-translate": "2.4.0",
+    "angular-translate-loader-static-files": "2.4.0",
+    "angular-translate-loader-url": "2.4.0",
+    "angular-translate-loader-partial": "2.4.0",
+    "angular-sanitize": "1.3.13",
+    "angular-animate": "1.3.13",
+    "angular-motion": "0.3.4",
+    "animate.css": "3.1.0",
+    "angular-ui-tinymce": "0.0.8",
+    "ui-select": "https://github.com/angular-ui/ui-select.git#0.10.0",
+	"select2": "3.5.2",
+    "hyperagent": "0.4.0",
+    "angular-loading-bar": "0.6.0",
+    "efactory-ui-chameleon": "master",
+    "fusion-charts": "3.6.0",
+    "stacktrace": "0.6.0",
+    "efactory-angular-modules": "master",
+    "moment": "2.9.0"
+  },
+  "devDependencies": {},
+  "resolutions": {
+    "jquery": ">= 1.9.1"
+  }
+}

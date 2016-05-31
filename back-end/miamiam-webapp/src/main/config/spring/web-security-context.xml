@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+	<bean id="httpFilter" class="corp.airbus.helicopters.miamiam.filter.HttpFilter" />
+
+	<bean id="expireFilter" class="corp.airbus.helicopters.miamiam.filter.ExpireFilter" />
+
+	<beans profile="cors">
+		<bean id="corsFilter" class="corp.airbus.helicopters.miamiam.filter.CorsFilter" />
+	</beans>
+
+	<beans profile="!cors">
+		<bean id="corsFilter" class="corp.airbus.helicopters.miamiam.filter.NoCorsFilter" />
+	</beans>
+
+
+	<!-- Basic Spring configuration -->
+	<beans profile="auth-basic-spring">
+
+		<security:http use-expressions="true">
+			<security:intercept-url pattern="/**"
+				access="isAuthenticated()" />
+			<security:http-basic />
+			<security:csrf disabled="true" />
+		</security:http>
+
+		<bean id="basicAuthenticationProvider"
+			class="corp.airbus.helicopters.miamiam.security.authentication.basicSpring.BasicAuthenticationProvider">
+			<property name="UserDetailsService" ref="userService"></property>
+		</bean>
+
+		<security:authentication-manager
+			alias="authenticationManager">
+			<security:authentication-provider
+				ref="basicAuthenticationProvider">
+			</security:authentication-provider>
+		</security:authentication-manager>
+
+		<bean id="userService"
+			class="corp.airbus.helicopters.miamiam.security.authentication.basicSpring.FileUserDetailsService">
+			<property name="projectName" value="miamiam" />
+			<property name="configurationFolderVariableEnv" value="NEXTT_CONFIGURATION_FOLDER" />
+			<property name="file" value="basic-spring-users.properties" />
+		</bean>
+
+	</beans>
+
+	<!-- Basic server configuration -->
+	<beans profile="auth-basic-server">
+		<security:http use-expressions="true" auto-config="false"
+			create-session="stateless" pattern="/**" entry-point-ref="preauthFailedEntryPoint">
+			<security:custom-filter position="PRE_AUTH_FILTER"
+				ref="preauthFilter" />
+			<security:intercept-url pattern="/**"
+				access="isAuthenticated()" />
+			<security:anonymous />
+		</security:http>
+		
+		<bean id="preauthFailedEntryPoint"
+			class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint">
+		</bean>
+
+		<security:authentication-manager
+			alias="authenticationManager">
+			<security:authentication-provider
+				ref="preAuthenticatedAuthenticationProvider" />
+		</security:authentication-manager>
+
+		<bean id="preAuthenticatedAuthenticationProvider"
+			class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+			<property name="preAuthenticatedUserDetailsService">
+				<bean
+					class="corp.airbus.helicopters.miamiam.security.authentication.basicServer.UserDetailsProvider" />
+			</property>
+		</bean>
+		
+		
+		<bean id="serverAuthenticationDetailProvider"
+			class="corp.airbus.helicopters.miamiam.security.authentication.basicServer.ServerAuthenticationDetailProvider" />
+
+		<bean id="preauthFilter"
+			class="org.springframework.security.web.authentication.preauth.j2ee.J2eePreAuthenticatedProcessingFilter">
+			<property name="authenticationManager" ref="authenticationManager" />
+			<property name="authenticationDetailsSource" ref="serverAuthenticationDetailProvider" />
+		</bean>
+	</beans>
+
+	<!-- Waffle configuration -->
+	<beans profile="auth-waffle">
+
+		<bean id="waffleWindowsAuthProvider" class="waffle.windows.auth.impl.WindowsAuthProviderImpl" />
+
+		<bean id="negotiateSecurityFilterProvider" class="waffle.servlet.spi.NegotiateSecurityFilterProvider">
+			<constructor-arg ref="waffleWindowsAuthProvider" />
+		</bean>
+
+		<bean id="waffleSecurityFilterProviderCollection" class="waffle.servlet.spi.SecurityFilterProviderCollection">
+			<constructor-arg>
+				<list>
+					<ref bean="negotiateSecurityFilterProvider" />
+					<ref bean="basicSecurityFilterProvider" />
+				</list>
+			</constructor-arg>
+		</bean>
+
+		<bean id="basicSecurityFilterProvider" class="waffle.servlet.spi.BasicSecurityFilterProvider">
+			<constructor-arg ref="waffleWindowsAuthProvider" />
+			<property name="realm" value="DemoRealm" />
+		</bean>
+
+		<security:http entry-point-ref="negotiateSecurityFilterEntryPoint"
+			use-expressions="true">
+			<security:intercept-url pattern="/**"
+				access="isAuthenticated()" />
+			<security:custom-filter ref="waffleFilter"
+				position="BASIC_AUTH_FILTER" />
+			<security:csrf disabled="true" />
+		</security:http>
+
+		<bean id="negotiateSecurityFilterEntryPoint" class="waffle.spring.NegotiateSecurityFilterEntryPoint">
+			<property name="Provider" ref="waffleSecurityFilterProviderCollection" />
+		</bean>
+
+		<bean id="waffleFilter"
+			class="corp.airbus.helicopters.miamiam.security.authentication.waffle.WaffleFilter">
+			<property name="Provider" ref="waffleSecurityFilterProviderCollection" />
+		</bean>
+
+		<security:authentication-manager
+			alias="authenticationManager">
+		</security:authentication-manager>
+	</beans>
+
+
+
+</beans>

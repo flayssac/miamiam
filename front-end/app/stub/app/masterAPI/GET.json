@@ -1,0 +1,31 @@
+[
+       {
+        "name": "collection",
+        "uri": "http://localhost:8080/panoramx-back/ws/<VERSION>/lists",
+        "version": "[DevMode]"
+    },
+        {
+        "name": "value",
+        "uri": "http://localhost:8080/panoramx-back/ws/<VERSION>/values",
+        "version": "[DevMode]"
+    },{
+        "name": "ata",
+        "uri": "http://localhost:8080/xportdm-back/ws/<VERSION>/atas",
+        "version": "[DevMode]"
+    },
+    {
+        "name": "criteria",
+        "uri": "http://localhost:8080/xportdm-back/ws/<VERSION>/criteria",
+        "version": "[DevMode]"
+    },
+    {
+        "name": "orioncallback",
+        "uri": "http://localhost:8080/xportdm-back/ws/<VERSION>/orion/preview/callback",
+        "version": "[DevMode]"
+    },
+    {
+	    "name": "du",
+	    "uri": "http://srv-nextt-4dam.proj.tlse.sqli.com:8080/adam-manager/ws/v1/dus",
+	    "version": "[DevMode]"
+  	}
+]
